@@ -7,12 +7,15 @@
       controls>
     </audio>
     <button @click="startstop()">{{this.start?'start':'stop'}}</button>
-    <p>{{ timeNowString }}-{{ timeDurationString }}</p>
-    <div class="progressBar">
-      <progress-bar
-        :progress="progress"
-        @progressChange="progressChange"
-      ></progress-bar>
+    <div class="progress">
+      {{ timeNowString }}
+      <div class="progressBar">
+        <progress-bar
+          :progress="progress"
+          @progressChange="progressChange"
+        ></progress-bar>
+      </div>
+      {{ timeDurationString }}
     </div>
     <button @click="ifSound()">{{sound?'sound':'nosound'}}</button>
   </div>
@@ -40,7 +43,7 @@ export default {
       },
       set(newValue){
         const self = this;
-        self.timeNow = newValue*self.timeDuration/100;
+        self.timeNow = Math.round(newValue*self.timeDuration/100);
         self.$refs.player.currentTime = self.timeNow;
       }      
     },
@@ -103,6 +106,10 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
+<style lang="stylus" scoped>
+.progress
+  margin: 10px
+  .progressBar
+    display: inline-block
+    padding-bottom: 2px
 </style>
