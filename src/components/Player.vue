@@ -6,23 +6,31 @@
       style="display: none"
       controls>
     </audio>
-    <button @click="startstop()">start/stop</button>
+    <button @click="startstop()">{{this.start?'start':'stop'}}</button>
     <p>{{ timeNowString }}-{{ timeDurationString }}</p>
     <div class="progressBar">
-      <input type="range" min="0" max="100" v-model:value=progress />
+      <progress-bar
+        :progress="progress"
+        @progressChange="progressChange"
+      ></progress-bar>
     </div>
     <button @click="ifSound()">{{sound?'sound':'nosound'}}</button>
   </div>
 </template>
 
 <script>
+import ProgressBar from './playerComponents/ProgressBar'
 export default {
   name: 'Player',
+  components: {
+    ProgressBar
+  },
   data () {
     return {
       timeNow: 0,
       timeDuration: 0,
-      sound: true
+      sound: true,
+      start: true
     }
   },
   computed: {
@@ -53,6 +61,7 @@ export default {
       	player.play();
       else
       	player.pause();
+      this.start = player.paused
   	},
   	ifSound: function(){
   	  const self = this;
@@ -60,6 +69,10 @@ export default {
       player.muted=this.sound;
       this.sound=!this.sound;
   	},
+    progressChange: function(value){
+      console.log(value)
+      this.progress=value
+    },
     addEventListeners: function () {
       const self = this;
       self.$refs.player.addEventListener('timeupdate', self._currentTime),
