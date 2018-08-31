@@ -17,16 +17,22 @@
       </div>
       {{ timeDurationString }}
     </div>
-    <button @click="ifSound()">{{sound?'sound':'nosound'}}</button>
+    <sound-set
+      style="display: inline-block"
+      :sound="sound"
+      @changeSound="ifSound()"
+    ></sound-set>
   </div>
 </template>
 
 <script>
 import ProgressBar from './playerComponents/ProgressBar'
+import SoundSet from './playerComponents/Sound'
 export default {
   name: 'Player',
   components: {
-    ProgressBar
+    ProgressBar,
+    SoundSet
   },
   data () {
     return {
