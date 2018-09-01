@@ -3,7 +3,7 @@
     <audio
       ref="player"
       src="../assets/music.mp3"
-      style="display: none"
+      style="display: block"
       controls>
     </audio>
     <button @click="startstop()">{{this.start?'start':'stop'}}</button>
@@ -20,7 +20,8 @@
     <sound-set
       style="display: inline-block"
       :sound="sound"
-      @changeSound="ifSound()"
+      @changeSound="ifSound"
+      @changeVolume="handleChangeVolume"
     ></sound-set>
   </div>
 </template>
@@ -39,7 +40,7 @@ export default {
       timeNow: 0,
       timeDuration: 0,
       sound: true,
-      start: true
+      start: true,
     }
   },
   computed: {
@@ -78,6 +79,12 @@ export default {
       player.muted=this.sound;
       this.sound=!this.sound;
   	},
+    handleChangeVolume: function(val){
+      const self = this;
+      let player = self.$refs.player;
+      player.volume = val/100;
+      player.muted=!(this.sound=!(val == 0));
+    },
     progressChange: function(value){
       console.log(value)
       this.progress=value
