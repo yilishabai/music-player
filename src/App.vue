@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Header/>
-    <Player/>
+    <Header @changeMusicSrc="changeMusicSrc" />
+    <Player :musicSrc="musicSrc"/>
   </div>
 </template>
 
@@ -10,6 +10,17 @@ import Header from './components/Header'
 import Player from './components/Player'
 export default {
   name: 'App',
+  data() {
+  	return {
+  	  musicSrc:"./assets/music.mp3"
+  	}
+  },
+  methods: {
+    changeMusicSrc: function(musicSrc){
+      console.log(musicSrc)
+      this.musicSrc=musicSrc;
+    }
+  },
   components: {
     Header,
     Player

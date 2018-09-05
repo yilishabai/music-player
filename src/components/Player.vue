@@ -2,11 +2,11 @@
   <div>
     <audio
       ref="player"
-      src="../assets/music.mp3"
-      style="display: block"
+      :src="musicSrc"
+      style="display: none"
       controls>
     </audio>
-    <button @click="startstop()">{{this.start?'start':'stop'}}</button>
+    <div @click="startstop()" class="iconfont playIcon">{{this.start?'&#xe61c;':'&#xe61d;'}}</div>
     <div class="progress">
       {{ timeNowString }}
       <div class="progressBar">
@@ -30,6 +30,9 @@
 import ProgressBar from './playerComponents/ProgressBar'
 import SoundSet from './playerComponents/Sound'
 export default {
+  props:{
+    musicSrc: String
+  },
   name: 'Player',
   components: {
     ProgressBar,
@@ -86,8 +89,12 @@ export default {
       player.muted=!(this.sound=!(val == 0));
     },
     progressChange: function(value){
+      const self = this;
+      let player = self.$refs.player;
       console.log(value)
-      this.progress=value
+      this.progress=value;
+      player.pause();
+      this.start = player.paused
     },
     addEventListeners: function () {
       const self = this;
@@ -106,6 +113,15 @@ export default {
     _durationTime: function () {
       const self = this;
       self.timeDuration = parseInt(self.$refs.player.duration)
+    }
+  },
+  watch: {
+    musicSrc: function(){
+      const self = this;
+      let player = self.$refs.player;
+      this.progressChange(0);
+      player.pause();
+      this.start = player.paused            
     }
   },
   mounted() {
